@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { neon } from "@neondatabase/serverless";
-import { upload, generateClientTokenFromReadWriteToken } from "@vercel/blob/client"; // Added generateClientToken helper
+import { upload } from "@vercel/blob/client"; 
 import MemoryCard from "../components/MemoryCard";
 
 // Initialize Neon Client
@@ -48,19 +48,10 @@ const Diary = () => {
       const uploadedUrls = [];
 
       for (const file of imageFiles) {
-        // Step 1: Generate a client token manually to bypass the /api/upload 404
-        const clientToken = await generateClientTokenFromReadWriteToken({
-          token: import.meta.env.VITE_BLOB_READ_WRITE_TOKEN,
-          pathname: file.name,
-          onBeforeGenerateToken: async () => ({
-            allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif'],
-          }),
-        });
-
-        // Step 2: Upload using the manual clientToken
+        // Updated to use the /api/upload endpoint automatically
         const newBlob = await upload(file.name, file, {
           access: 'public',
-          clientToken: clientToken, 
+          handleUploadUrl: '/api/upload', // Points to your new file
         });
 
         uploadedUrls.push(newBlob.url);

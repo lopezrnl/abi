@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { neon } from "@neondatabase/serverless";
 
+// Initialize Neon Client
 const sql = neon(import.meta.env.VITE_DATABASE_URL);
 
 const MemoryDetails = () => {
@@ -13,13 +14,13 @@ const MemoryDetails = () => {
   useEffect(() => {
     const fetchMemory = async () => {
       try {
-        // Fetch from Neon database instead of localStorage
+        // Fetch specific memory from SQL database instead of localstorage
         const rows = await sql`SELECT * FROM memories WHERE id = ${id}`;
         if (rows.length > 0) {
           setMemory(rows[0]);
         }
       } catch (err) {
-        console.error("Database error:", err);
+        console.error("Database fetch error:", err);
       } finally {
         setLoading(false);
       }

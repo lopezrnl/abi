@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "@supabase/supabase-js": "^2.88.0",
     "@tailwindcss/vite": "^4.1.18",
+    "@vercel/blob": "^2.0.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.26",
     "localforage": "^1.10.0",

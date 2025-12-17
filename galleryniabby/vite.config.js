@@ -8,6 +8,10 @@ export default defineConfig({
   plugins: [
     react(),
   ],
+  // This section solves the "process is not defined" error
+  define: {
+    'process.env': {},
+  },
   css: {
     postcss: {
       plugins: [

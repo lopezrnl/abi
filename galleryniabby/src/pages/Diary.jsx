@@ -1,74 +1,121 @@
 import React, { useState, useEffect } from "react";
-import localforage from "localforage";
+import { neon } from "@neondatabase/serverless";
 import MemoryCard from "../components/MemoryCard";
+
+// Initialize Neon Client
+const sql = neon(import.meta.env.VITE_DATABASE_URL);
 
 const Diary = () => {
   const [entries, setEntries] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [selectedMemory, setSelectedMemory] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("moment");
-  const [images, setImages] = useState([]);
+  const [imageFiles, setImageFiles] = useState([]);
 
   const profileImage = "/Abby.jpeg"; 
 
-  useEffect(() => {
-    const initLoad = async () => {
-      const saved = await localforage.getItem("abi_memories");
-      if (saved) setEntries(saved);
-    };
-    initLoad();
-  }, []);
-
-  useEffect(() => {
-    localforage.setItem("abi_memories", entries);
-  }, [entries]);
-
-  const handleImages = (e) => {
-    const files = Array.from(e.target.files);
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target.result;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 1000; 
-          const scaleSize = MAX_WIDTH / img.width;
-          canvas.width = MAX_WIDTH;
-          canvas.height = img.height * scaleSize;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
-          setImages(prev => [...prev, compressedDataUrl]);
-        };
-      };
-    });
-  };
-
-  const saveEntry = (e) => {
-    e.preventDefault();
-    const newEntry = { id: Date.now(), title, content, images, tag, date: new Date().toLocaleDateString() };
-    setEntries(prev => [newEntry, ...prev]);
-    setTitle(""); setContent(""); setImages([]); setTag("moment"); setIsAdding(false);
-  };
-
-  const deleteEntry = (id) => {
-    if(window.confirm("Delete this memory?")) {
-        setEntries(prev => prev.filter(e => e.id !== id));
+  // 1. Fetch Memories from Neon
+  const fetchMemories = async () => {
+    try {
+      const rows = await sql`SELECT * FROM memories ORDER BY id DESC`;
+      setEntries(rows);
+    } catch (error) {
+      console.error("Error fetching from Neon:", error);
     }
   };
 
-  const filteredEntries = entries.filter(e => e.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  useEffect(() => {
+    fetchMemories();
+  }, []);
+
+  const handleImages = (e) => {
+    const files = Array.from(e.target.files);
+    setImageFiles(prev => [...prev, ...files]);
+  };
+
+  // 3. Save Entry - Using PUT Fetch to fix CORS and 405 errors
+  const saveEntry = async (e) => {
+    e.preventDefault();
+    if (imageFiles.length === 0) return alert("Please select at least one photo.");
+    
+    setIsUploading(true);
+
+    try {
+      const uploadedUrls = [];
+
+      // A. Upload to Vercel Blob via standard PUT fetch
+      for (const file of imageFiles) {
+        // We add a random suffix manually to the filename to prevent overwriting
+        const fileName = `${Date.now()}-${file.name}`;
+        
+        const response = await fetch(
+          `https://blob.vercel-storage.com/${fileName}`,
+          {
+            method: 'PUT',
+            body: file,
+            headers: {
+              'Authorization': `Bearer ${import.meta.env.VITE_BLOB_READ_WRITE_TOKEN}`,
+              'x-api-version': '6',
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Upload failed: ${errorText}`);
+        }
+
+        const result = await response.json();
+        uploadedUrls.push(result.url);
+      }
+
+      // B. Save metadata to NEON
+      await sql`
+        INSERT INTO memories (title, content, tag, images, date)
+        VALUES (${title}, ${content}, ${tag}, ${uploadedUrls}, ${new Date().toLocaleDateString()})
+      `;
+
+      await fetchMemories();
+      
+      // Reset Form
+      setTitle(""); 
+      setContent(""); 
+      setImageFiles([]); 
+      setTag("moment"); 
+      setIsAdding(false);
+      
+    } catch (err) {
+      console.error("Upload Error:", err);
+      alert("Error saving memory: " + err.message);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const deleteEntry = async (id) => {
+    if(window.confirm("Delete this memory?")) {
+        try {
+            await sql`DELETE FROM memories WHERE id = ${id}`;
+            fetchMemories();
+        } catch (error) {
+            console.error("Delete error:", error);
+        }
+    }
+  };
+
+  const filteredEntries = entries.filter(e => 
+    e.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-10">
       
-      {/* HEADER SECTION - Responsive Stacking */}
+      {/* HEADER */}
       <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-4 md:gap-6 mb-8 md:mb-12">
         <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img src={profileImage} alt="Abigail" className="w-full h-full object-cover" />
@@ -79,7 +126,7 @@ const Diary = () => {
         </div>
       </div>
 
-      {/* SEARCH & ADD BAR - Stacks on Mobile */}
+      {/* SEARCH & ADD BAR */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 bg-stone-50 p-3 md:p-4 rounded-2xl md:rounded-3xl border border-stone-100">
         <input 
           type="text" 
@@ -89,13 +136,13 @@ const Diary = () => {
         />
         <button 
           onClick={() => setIsAdding(true)} 
-          className="w-full sm:w-auto bg-stone-800 text-white px-8 py-3 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest shadow-md hover:bg-rose-500 transition-all active:scale-95"
+          className="w-full sm:w-auto bg-stone-800 text-white px-8 py-3 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest hover:bg-rose-500 transition-all active:scale-95"
         >
           + New Album
         </button>
       </div>
 
-      {/* GRID DISPLAY - 1, 2, or 3 columns */}
+      {/* GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
         {filteredEntries.map(entry => (
           <MemoryCard 
@@ -112,7 +159,7 @@ const Diary = () => {
         )}
       </div>
 
-      {/* --- ADD NEW MEMORY MODAL --- */}
+      {/* MODAL: ADD NEW */}
       {isAdding && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-sm animate-in fade-in">
           <form onSubmit={saveEntry} className="bg-white w-full max-w-2xl p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] space-y-4 md:space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
@@ -137,32 +184,31 @@ const Diary = () => {
                     Upload Photos 
                     <input type="file" multiple onChange={handleImages} className="hidden" />
                 </label>
-                <div className="flex gap-3 overflow-x-auto mt-4 pb-2 scrollbar-hide">
-                   {images.map((img, i) => (<img key={i} src={img} className="h-16 w-16 md:h-20 md:w-20 shrink-0 object-cover rounded-xl border-2 border-white shadow-sm" alt="" />))}
-                </div>
+                <p className="mt-2 text-[10px] text-stone-400 italic">{imageFiles.length} photos selected</p>
             </div>
             
-            <button type="submit" className="w-full bg-stone-800 text-white py-4 rounded-2xl text-[10px] md:text-xs font-bold uppercase tracking-widest shadow-lg hover:bg-rose-600 transition-colors active:scale-[0.98]">
-                Archive Memory
+            <button 
+              type="submit" 
+              disabled={isUploading}
+              className="w-full bg-stone-800 text-white py-4 rounded-2xl text-[10px] md:text-xs font-bold uppercase tracking-widest shadow-lg hover:bg-rose-600 transition-colors disabled:bg-stone-400"
+            >
+                {isUploading ? "Syncing to Cloud..." : "Archive Memory"}
             </button>
           </form>
         </div>
       )}
 
-      {/* --- VIEW FULL ALBUM MODAL --- */}
+      {/* MODAL: VIEW FULL ALBUM */}
       {selectedMemory && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-stone-900/60 backdrop-blur-md animate-in fade-in duration-300">
           <div className="bg-white w-full max-w-4xl rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[95vh] md:max-h-[85vh]">
             
-            {/* Left: Image Gallery */}
             <div className="w-full md:w-1/2 bg-stone-100 h-64 sm:h-80 md:h-auto overflow-y-auto p-3 md:p-4 space-y-4">
-              {selectedMemory.images.map((img, i) => (
+              {selectedMemory.images?.map((img, i) => (
                 <img key={i} src={img} className="w-full rounded-xl md:rounded-2xl shadow-sm" alt="" />
               ))}
-              {selectedMemory.images.length === 0 && <div className="h-full min-h-[200px] flex items-center justify-center text-stone-400 italic text-sm">No photos in this album</div>}
             </div>
 
-            {/* Right: Description */}
             <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col relative bg-white overflow-y-auto">
               <button 
                 onClick={() => setSelectedMemory(null)}

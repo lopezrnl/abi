@@ -16,6 +16,8 @@ const Diary = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("moment");
+  
+  // Changed imageFiles to hold objects with a preview URL
   const [imageFiles, setImageFiles] = useState([]);
 
   const profileImage = "/Abby.jpeg"; 
@@ -35,12 +37,21 @@ const Diary = () => {
 
   const handleImages = (e) => {
     const files = Array.from(e.target.files);
-    setImageFiles(prev => [...prev, ...files]);
+    // Create preview URLs for the selected files
+    const newFiles = files.map(file => ({
+      file,
+      preview: URL.createObjectURL(file),
+      id: Math.random().toString(36).substr(2, 9)
+    }));
+    setImageFiles(prev => [...prev, ...newFiles]);
   };
 
- // Only replace the saveEntry function in your Diary.jsx
+  // Function to remove a specific photo from the preview list
+  const removeImage = (id) => {
+    setImageFiles(prev => prev.filter(img => img.id !== id));
+  };
 
-const saveEntry = async (e) => {
+  const saveEntry = async (e) => {
   e.preventDefault();
   if (imageFiles.length === 0) return alert("Please select at least one photo.");
   
@@ -49,13 +60,14 @@ const saveEntry = async (e) => {
   try {
     const uploadedUrls = [];
 
-    for (const file of imageFiles) {
-      console.log('Uploading file:', file.name);
+    for (const item of imageFiles) {
+      console.log('Uploading file:', item.file.name);
       
-      // Create a new blob upload using the Vercel Blob API
-      const newBlob = await upload(file.name, file, {
+      // Add addRandomSuffix: true to the options object below
+      const newBlob = await upload(item.file.name, item.file, {
         access: 'public',
         handleUploadUrl: '/api/upload',
+        addRandomSuffix: true, // This prevents the "blob already exists" error
       });
 
       console.log('Upload successful:', newBlob.url);
@@ -177,6 +189,24 @@ const saveEntry = async (e) => {
                     Upload Photos 
                     <input type="file" multiple onChange={handleImages} className="hidden" />
                 </label>
+                
+                {/* PREVIEW GRID */}
+                {imageFiles.length > 0 && (
+                  <div className="grid grid-cols-4 md:grid-cols-6 gap-2 mt-4">
+                    {imageFiles.map((img) => (
+                      <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden group">
+                        <img src={img.preview} className="w-full h-full object-cover" alt="Preview" />
+                        <button 
+                          type="button"
+                          onClick={() => removeImage(img.id)}
+                          className="absolute inset-0 bg-rose-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <span className="text-xs font-bold">Remove</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <p className="mt-2 text-[10px] text-stone-400 italic">{imageFiles.length} photos selected</p>
             </div>
             

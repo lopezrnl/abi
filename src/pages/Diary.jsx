@@ -38,46 +38,57 @@ const Diary = () => {
     setImageFiles(prev => [...prev, ...files]);
   };
 
-  const saveEntry = async (e) => {
-    e.preventDefault();
-    if (imageFiles.length === 0) return alert("Please select at least one photo.");
-    
-    setIsUploading(true);
+ // Only replace the saveEntry function in your Diary.jsx
 
-    try {
-      const uploadedUrls = [];
+const saveEntry = async (e) => {
+  e.preventDefault();
+  if (imageFiles.length === 0) return alert("Please select at least one photo.");
+  
+  setIsUploading(true);
 
-      for (const file of imageFiles) {
-        // Updated to use the /api/upload endpoint automatically
-        const newBlob = await upload(file.name, file, {
-          access: 'public',
-          handleUploadUrl: '/api/upload', // Points to your new file
-        });
+  try {
+    const uploadedUrls = [];
 
-        uploadedUrls.push(newBlob.url);
-      }
-
-      // Step 3: Save metadata to NEON
-      await sql`
-        INSERT INTO memories (title, content, tag, images, date)
-        VALUES (${title}, ${content}, ${tag}, ${uploadedUrls}, ${new Date().toLocaleDateString()})
-      `;
-
-      await fetchMemories();
+    for (const file of imageFiles) {
+      console.log('Uploading file:', file.name);
       
-      setTitle(""); 
-      setContent(""); 
-      setImageFiles([]); 
-      setTag("moment"); 
-      setIsAdding(false);
-      
-    } catch (err) {
-      console.error("Upload Error:", err);
-      alert("Error saving memory: " + err.message);
-    } finally {
-      setIsUploading(false);
+      // Create a new blob upload using the Vercel Blob API
+      const newBlob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
+      });
+
+      console.log('Upload successful:', newBlob.url);
+      uploadedUrls.push(newBlob.url);
     }
-  };
+
+    console.log('All uploads complete. Saving to database...');
+
+    // Save metadata to NEON
+    await sql`
+      INSERT INTO memories (title, content, tag, images, date)
+      VALUES (${title}, ${content}, ${tag}, ${uploadedUrls}, ${new Date().toLocaleDateString()})
+    `;
+
+    console.log('Memory saved successfully!');
+    await fetchMemories();
+    
+    // Reset form
+    setTitle(""); 
+    setContent(""); 
+    setImageFiles([]); 
+    setTag("moment"); 
+    setIsAdding(false);
+    
+    alert("Memory archived successfully! 🎉");
+    
+  } catch (err) {
+    console.error("Upload Error:", err);
+    alert("Error saving memory: " + err.message);
+  } finally {
+    setIsUploading(false);
+  }
+};
 
   const deleteEntry = async (id) => {
     if(window.confirm("Delete this memory?")) {

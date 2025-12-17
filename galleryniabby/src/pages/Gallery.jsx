@@ -1,0 +1,152 @@
+import React, { useState, useEffect } from "react";
+import localforage from "localforage";
+
+const Gallery = () => {
+  const [entries, setEntries] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const saved = await localforage.getItem("abi_memories");
+      if (saved) setEntries(saved);
+    };
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    localforage.setItem("abi_memories", entries);
+  }, [entries]);
+
+  // --- DOWNLOAD FUNCTION ---
+  const downloadImage = (base64String, title) => {
+    const timestamp = new Date().getTime(); // Generate inside the handler
+    const fileName = title.replace(/\s+/g, '_').toLowerCase();
+    
+    const link = document.createElement("a");
+    link.href = base64String;
+    link.download = `Abi_${fileName}_${timestamp}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // --- DELETE FUNCTION ---
+  const deleteVisual = (entryId) => {
+    if (window.confirm("Are you sure you want to delete this visual?")) {
+      setEntries((prev) => prev.filter((e) => e.id !== entryId));
+    }
+  };
+
+  const handleQuickUpload = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 1200;
+          const scaleSize = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scaleSize;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7);
+
+          const newEntry = {
+            id: Date.now() + Math.random(),
+            title: "Quick Snapshot",
+            content: "Added from Gallery",
+            images: [compressedDataUrl],
+            tag: "moment",
+            date: new Date().toLocaleDateString(),
+          };
+          setEntries((prev) => [newEntry, ...prev]);
+        };
+      };
+    });
+  };
+
+  const allImages = entries.filter((entry) => entry.images && entry.images.length > 0);
+
+  return (
+    <div className="animate-in fade-in duration-1000 p-6">
+      <div className="flex justify-between items-end mb-12">
+        <div>
+          <h2 className="text-5xl font-serif italic text-stone-800">Visuals.</h2>
+          <p className="text-stone-400 mt-2 italic">A collection of captured light.</p>
+        </div>
+
+        <label className="bg-stone-800 text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all shadow-md hover:bg-rose-500 cursor-pointer">
+          + Add Visual
+          <input type="file" multiple className="hidden" onChange={handleQuickUpload} accept="image/*" />
+        </label>
+      </div>
+
+      {allImages.length === 0 ? (
+        <div className="h-64 border-2 border-dashed border-stone-200 rounded-3xl flex items-center justify-center text-stone-400 italic font-serif">
+          No photos archived yet.
+        </div>
+      ) : (
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+          {allImages.map((item) =>
+            item.images.map((imgUrl, index) => (
+              <div
+                key={`${item.id}-${index}`}
+                className="break-inside-avoid group relative rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 shadow-sm transition-all hover:shadow-xl"
+              >
+                <img
+                  src={imgUrl}
+                  alt={item.title}
+                  className="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700"
+                />
+
+                {/* OVERLAY */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-6">
+                  <div className="flex justify-end gap-2">
+                    {/* Download Button */}
+                    <button
+                      onClick={() => downloadImage(imgUrl, item.title)}
+                      className="bg-white/20 backdrop-blur-md text-white p-2 rounded-full hover:bg-white hover:text-stone-800 transition-all"
+                      title="Download"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                      onClick={() => deleteVisual(item.id)}
+                      className="bg-white/20 backdrop-blur-md text-white p-2 rounded-full hover:bg-rose-500 transition-all"
+                      title="Delete"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div>
+                    <p className="text-white font-serif italic text-lg">
+                      {item.title === "Quick Snapshot" ? "Moment" : item.title}
+                    </p>
+                    <p className="text-white/70 text-[10px] uppercase tracking-widest">
+                      {item.date}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Gallery;

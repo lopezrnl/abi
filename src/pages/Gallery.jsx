@@ -1,19 +1,40 @@
 import React, { useState, useEffect } from "react";
 import localforage from "localforage";
+// 1. Import Neon to access the cloud database
+import { neon } from "@neondatabase/serverless";
+
+// 2. Initialize Neon Client using your environment variable
+const sql = neon(import.meta.env.VITE_DATABASE_URL);
 
 const Gallery = () => {
   const [entries, setEntries] = useState([]);
 
+  // 3. Updated useEffect to fetch from Neon Database
   useEffect(() => {
     const loadData = async () => {
-      const saved = await localforage.getItem("abi_memories");
-      if (saved) setEntries(saved);
+      try {
+        // Fetch memories from SQL database
+        const rows = await sql`SELECT * FROM memories ORDER BY id DESC`;
+        
+        // Also check localforage for any "Quick Snapshots" added locally
+        const localSaved = await localforage.getItem("abi_memories") || [];
+        
+        // Combine both (Database entries + Local entries)
+        setEntries([...rows, ...localSaved]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Fallback to local storage if DB fails
+        const saved = await localforage.getItem("abi_memories");
+        if (saved) setEntries(saved);
+      }
     };
     loadData();
   }, []);
 
+  // Save local snapshots to localforage
   useEffect(() => {
-    localforage.setItem("abi_memories", entries);
+    const localOnly = entries.filter(e => e.content === "Added from Gallery");
+    localforage.setItem("abi_memories", localOnly);
   }, [entries]);
 
   const downloadImage = (base64String, title) => {
@@ -27,8 +48,15 @@ const Gallery = () => {
     document.body.removeChild(link);
   };
 
-  const deleteVisual = (entryId) => {
+  const deleteVisual = async (entryId, isLocal) => {
     if (window.confirm("Are you sure you want to delete this visual?")) {
+      if (!isLocal) {
+        try {
+          await sql`DELETE FROM memories WHERE id = ${entryId}`;
+        } catch (error) {
+          console.error("Delete error:", error);
+        }
+      }
       setEntries((prev) => prev.filter((e) => e.id !== entryId));
     }
   };
@@ -54,7 +82,7 @@ const Gallery = () => {
           const newEntry = {
             id: Date.now() + Math.random(),
             title: "Quick Snapshot",
-            content: "Added from Gallery",
+            content: "Added from Gallery", // Marker for local storage
             images: [compressedDataUrl],
             tag: "moment",
             date: new Date().toLocaleDateString(),
@@ -69,7 +97,6 @@ const Gallery = () => {
 
   return (
     <div className="animate-in fade-in duration-1000 p-4 sm:p-6 lg:p-10">
-      {/* HEADER SECTION - Responsive Flex */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-8 md:mb-12">
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif italic text-stone-800">Visuals.</h2>
@@ -87,7 +114,6 @@ const Gallery = () => {
           No photos archived yet.
         </div>
       ) : (
-        /* MASONRY GRID - Responsive Columns */
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
           {allImages.map((item) =>
             item.images.map((imgUrl, index) => (
@@ -101,8 +127,6 @@ const Gallery = () => {
                   className="w-full h-auto grayscale sm:group-hover:grayscale-0 transition-all duration-700"
                 />
 
-                {/* OVERLAY - Mobile vs Desktop behavior */}
-                {/* On mobile, icons are always visible slightly, on desktop they appear on hover */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex flex-col justify-between p-4 md:p-6">
                   <div className="flex justify-end gap-2">
                     <button
@@ -118,7 +142,7 @@ const Gallery = () => {
                     </button>
 
                     <button
-                      onClick={() => deleteVisual(item.id)}
+                      onClick={() => deleteVisual(item.id, item.content === "Added from Gallery")}
                       className="bg-white/20 backdrop-blur-md text-white p-2 rounded-full hover:bg-rose-500 transition-all active:scale-90"
                       title="Delete"
                     >

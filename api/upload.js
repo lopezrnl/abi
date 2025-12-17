@@ -3,7 +3,6 @@ import { handleUpload } from '@vercel/blob/client';
 
 export const config = {
   api: {
-    // CHANGE: Set this to true (or remove it, as it's true by default)
     bodyParser: true, 
   },
 };
@@ -19,7 +18,7 @@ export default async function handler(request, response) {
 
   try {
     const jsonResponse = await handleUpload({
-      body: request.body, // CHANGE: Pass request.body instead of request
+      body: request.body, 
       request,
       onBeforeGenerateToken: async () => {
         if (!process.env.BLOB_READ_WRITE_TOKEN) {
@@ -27,6 +26,8 @@ export default async function handler(request, response) {
         }
         return {
           allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'],
+          // CONFIGURATION MOVED HERE:
+          addRandomSuffix: true, 
           tokenPayload: JSON.stringify({ userId: 'abigail-diary' }),
         };
       },

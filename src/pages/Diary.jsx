@@ -17,7 +17,6 @@ const Diary = () => {
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("moment");
   
-  // Changed imageFiles to hold objects with a preview URL
   const [imageFiles, setImageFiles] = useState([]);
 
   const profileImage = "/Abby.jpeg"; 
@@ -37,7 +36,6 @@ const Diary = () => {
 
   const handleImages = (e) => {
     const files = Array.from(e.target.files);
-    // Create preview URLs for the selected files
     const newFiles = files.map(file => ({
       file,
       preview: URL.createObjectURL(file),
@@ -46,61 +44,57 @@ const Diary = () => {
     setImageFiles(prev => [...prev, ...newFiles]);
   };
 
-  // Function to remove a specific photo from the preview list
   const removeImage = (id) => {
     setImageFiles(prev => prev.filter(img => img.id !== id));
   };
 
   const saveEntry = async (e) => {
-  e.preventDefault();
-  if (imageFiles.length === 0) return alert("Please select at least one photo.");
-  
-  setIsUploading(true);
+    e.preventDefault();
+    if (imageFiles.length === 0) return alert("Please select at least one photo.");
+    
+    setIsUploading(true);
 
-  try {
-    const uploadedUrls = [];
+    try {
+      const uploadedUrls = [];
 
-    for (const item of imageFiles) {
-      console.log('Uploading file:', item.file.name);
+      for (const item of imageFiles) {
+        console.log('Uploading file:', item.file.name);
+        
+        // CHANGE: Removed addRandomSuffix from here
+        const newBlob = await upload(item.file.name, item.file, {
+          access: 'public',
+          handleUploadUrl: '/api/upload',
+        });
+
+        console.log('Upload successful:', newBlob.url);
+        uploadedUrls.push(newBlob.url);
+      }
+
+      console.log('All uploads complete. Saving to database...');
+
+      await sql`
+        INSERT INTO memories (title, content, tag, images, date)
+        VALUES (${title}, ${content}, ${tag}, ${uploadedUrls}, ${new Date().toLocaleDateString()})
+      `;
+
+      console.log('Memory saved successfully!');
+      await fetchMemories();
       
-      // Add addRandomSuffix: true to the options object below
-      const newBlob = await upload(item.file.name, item.file, {
-        access: 'public',
-        handleUploadUrl: '/api/upload',
-        addRandomSuffix: true, // This prevents the "blob already exists" error
-      });
-
-      console.log('Upload successful:', newBlob.url);
-      uploadedUrls.push(newBlob.url);
+      setTitle(""); 
+      setContent(""); 
+      setImageFiles([]); 
+      setTag("moment"); 
+      setIsAdding(false);
+      
+      alert("Memory archived successfully! 🎉");
+      
+    } catch (err) {
+      console.error("Upload Error:", err);
+      alert("Error saving memory: " + err.message);
+    } finally {
+      setIsUploading(false);
     }
-
-    console.log('All uploads complete. Saving to database...');
-
-    // Save metadata to NEON
-    await sql`
-      INSERT INTO memories (title, content, tag, images, date)
-      VALUES (${title}, ${content}, ${tag}, ${uploadedUrls}, ${new Date().toLocaleDateString()})
-    `;
-
-    console.log('Memory saved successfully!');
-    await fetchMemories();
-    
-    // Reset form
-    setTitle(""); 
-    setContent(""); 
-    setImageFiles([]); 
-    setTag("moment"); 
-    setIsAdding(false);
-    
-    alert("Memory archived successfully! 🎉");
-    
-  } catch (err) {
-    console.error("Upload Error:", err);
-    alert("Error saving memory: " + err.message);
-  } finally {
-    setIsUploading(false);
-  }
-};
+  };
 
   const deleteEntry = async (id) => {
     if(window.confirm("Delete this memory?")) {
@@ -119,8 +113,6 @@ const Diary = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-10">
-      
-      {/* HEADER */}
       <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-4 md:gap-6 mb-8 md:mb-12">
         <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img src={profileImage} alt="Abigail" className="w-full h-full object-cover" />
@@ -131,7 +123,6 @@ const Diary = () => {
         </div>
       </div>
 
-      {/* SEARCH & ADD BAR */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 bg-stone-50 p-3 md:p-4 rounded-2xl md:rounded-3xl border border-stone-100">
         <input 
           type="text" 
@@ -147,7 +138,6 @@ const Diary = () => {
         </button>
       </div>
 
-      {/* GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
         {filteredEntries.map(entry => (
           <MemoryCard 
@@ -164,7 +154,6 @@ const Diary = () => {
         )}
       </div>
 
-      {/* MODAL: ADD NEW */}
       {isAdding && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-sm animate-in fade-in">
           <form onSubmit={saveEntry} className="bg-white w-full max-w-2xl p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] space-y-4 md:space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
@@ -190,7 +179,6 @@ const Diary = () => {
                     <input type="file" multiple onChange={handleImages} className="hidden" />
                 </label>
                 
-                {/* PREVIEW GRID */}
                 {imageFiles.length > 0 && (
                   <div className="grid grid-cols-4 md:grid-cols-6 gap-2 mt-4">
                     {imageFiles.map((img) => (
@@ -221,23 +209,19 @@ const Diary = () => {
         </div>
       )}
 
-      {/* MODAL: VIEW FULL ALBUM */}
       {selectedMemory && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-stone-900/60 backdrop-blur-md animate-in fade-in duration-300">
           <div className="bg-white w-full max-w-4xl rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[95vh] md:max-h-[85vh]">
-            
             <div className="w-full md:w-1/2 bg-stone-100 h-64 sm:h-80 md:h-auto overflow-y-auto p-3 md:p-4 space-y-4">
               {selectedMemory.images?.map((img, i) => (
                 <img key={i} src={img} className="w-full rounded-xl md:rounded-2xl shadow-sm" alt="" />
               ))}
             </div>
-
             <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col relative bg-white overflow-y-auto">
               <button 
                 onClick={() => setSelectedMemory(null)}
                 className="absolute top-4 right-4 md:top-6 md:right-8 text-stone-300 hover:text-stone-800 text-xl md:text-2xl p-2"
               >✕</button>
-              
               <div className="mt-4">
                 <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-rose-400 bg-rose-50 px-4 py-1.5 rounded-full">
                   {selectedMemory.tag}
@@ -253,7 +237,6 @@ const Diary = () => {
                   "{selectedMemory.content}"
                 </p>
               </div>
-
               <button 
                 onClick={() => setSelectedMemory(null)}
                 className="mt-8 md:mt-auto w-full border border-stone-100 py-3 md:py-4 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-bold uppercase tracking-widest hover:bg-stone-50 transition-colors active:bg-stone-100"

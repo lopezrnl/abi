@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ScrollReveal from "../components/ScrollReveal";
 
 const AboutAbigail = () => {
@@ -21,7 +21,6 @@ const AboutAbigail = () => {
     { label: "Place", value: "Sanpiro", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=500&auto=format&fit=crop" },
   ];
 
-  // --- NEW DATA ADDITIONS ---
   const chapters = [
     { title: "The Dreamer", desc: "Finding magic in the mundane and beauty in every sunset." },
     { title: "The Writer", desc: "Turning fleeting feelings into permanent words through stories." },
@@ -65,7 +64,7 @@ const AboutAbigail = () => {
         </div>
       </ScrollReveal>
 
-      {/* --- NEW SECTION: LIFE CHAPTERS --- */}
+      {/* --- SECTION: LIFE CHAPTERS --- */}
       <ScrollReveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 border-t border-stone-100">
           {chapters.map((chapter, idx) => (
@@ -118,16 +117,20 @@ const AboutAbigail = () => {
         </div>
       </ScrollReveal>
 
-      {/* --- NEW SECTION: CURRENT STATUS --- */}
+      {/* --- UPDATED SECTION: CURRENT STATUS (LIGHT GRAY) --- */}
       <ScrollReveal>
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-10 rounded-[2rem] bg-stone-800 text-stone-100">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-10 rounded-[2rem] bg-stone-200 border border-stone-300 text-stone-800 shadow-sm">
           <div className="space-y-2 text-center md:text-left">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-rose-300 font-bold">Current Status</p>
-            <h3 className="text-2xl md:text-3xl font-serif italic">Self-love.</h3>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-rose-400 font-bold">Current Status</p>
+            <h3 className="text-2xl md:text-3xl font-serif italic text-stone-700">Self-love.</h3>
           </div>
           <div className="flex gap-4">
-            <div className="px-6 py-2 border border-stone-600 rounded-full text-xs uppercase tracking-widest font-bold">Writing</div>
-            <div className="px-6 py-2 border border-stone-600 rounded-full text-xs uppercase tracking-widest font-bold">Reading</div>
+            <div className="px-6 py-2 bg-white border border-stone-300 rounded-full text-[10px] uppercase tracking-widest font-bold text-stone-500 shadow-sm">
+              Writing
+            </div>
+            <div className="px-6 py-2 bg-white border border-stone-300 rounded-full text-[10px] uppercase tracking-widest font-bold text-stone-500 shadow-sm">
+              Reading
+            </div>
           </div>
         </div>
       </ScrollReveal>

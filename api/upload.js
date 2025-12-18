@@ -3,7 +3,7 @@ import { handleUpload } from '@vercel/blob/client';
 
 export const config = {
   api: {
-    bodyParser: true, 
+    bodyParser: false, 
   },
 };
 

@@ -309,6 +309,96 @@ const AboutAbigail = () => {
         </div>
       </ScrollReveal>
 
+      {/* --- SECTION: THE FINAL ACT --- */}
+      <ScrollReveal>
+        <div className="py-24 md:py-32 flex flex-col items-center justify-center text-center space-y-10 relative">
+          {/* Subtle line that fades away */}
+          <div className="w-px h-24 bg-gradient-to-b from-rose-200 to-transparent"></div>
+          
+          <div className="max-w-2xl px-6 space-y-6">
+            <span className="text-[10px] uppercase tracking-[0.6em] text-stone-400 font-bold">The End of the Archive</span>
+            <h3 className="text-3xl md:text-5xl font-serif italic text-stone-800">My last act of loving you.</h3>
+            
+            <p className="text-stone-500 font-serif text-lg md:text-xl leading-relaxed italic">
+              "I am putting down the pen now. Not because the story is over, but because I have finally realized that some chapters are meant to be read in silence, and some people are meant to be loved from a distance I can no longer bridge."
+            </p>
+
+            <div className="pt-8 opacity-60">
+              <p className="text-stone-400 text-sm font-serif italic">
+                This digital space, these words, and every captured light— <br />
+                Consider this my final letter. The one I never sent.
+              </p>
+            </div>
+          </div>
+
+          {/* A final, static "Polaroid" that represents the last memory */}
+          <div className="relative mt-12 group">
+            <div className="w-48 h-60 bg-white p-3 shadow-2xl border border-stone-100 -rotate-2 group-hover:rotate-0 transition-transform duration-1000">
+              <div className="w-full h-4/5 bg-stone-50 overflow-hidden">
+                <img 
+                  src="/30.jpeg" 
+                  alt="The last frame" 
+                  className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-80 transition-opacity duration-1000" 
+                />
+              </div>
+              <div className="mt-4 flex justify-between items-center px-1">
+                <span className="text-[8px] font-serif italic text-stone-300">Final Entry</span>
+                <span className="text-[8px] font-serif italic text-stone-300">{new Date().toLocaleDateString()}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-16">
+            <div className="h-1.5 w-1.5 bg-rose-200 rounded-full animate-pulse mx-auto"></div>
+          </div>
+        </div>
+      </ScrollReveal>
+
+      {/* --- SECTION: THE REVEAL (PRANK) --- */}
+      <ScrollReveal>
+        <div className="my-20 p-8 md:p-16 rounded-[3rem] bg-yellow-50 border-4 border-dashed border-yellow-200 text-center space-y-8 relative overflow-hidden">
+          {/* Confetti Emoji Decorations */}
+          <div className="absolute top-4 left-4 animate-bounce text-2xl">🎉</div>
+          <div className="absolute bottom-4 right-4 animate-bounce delay-100 text-2xl">😜</div>
+          <div className="absolute top-1/2 right-8 -translate-y-1/2 animate-pulse text-2xl">✨</div>
+
+          <div className="space-y-4 relative z-10">
+            <span className="text-[10px] uppercase tracking-[0.6em] text-yellow-600 font-bold">Gotcha!</span>
+            <h3 className="text-4xl md:text-6xl font-serif italic text-stone-800">
+              Wait... it’s just a prank! 
+            </h3>
+            
+            <div className="max-w-xl mx-auto">
+              <p className="text-stone-600 font-serif text-lg md:text-xl leading-relaxed italic">
+                "Did I make you cry? Or at least feel a little bit sentimental? Mission accomplished! All that 'last act of love' stuff was just me testing my acting (and coding) skills."
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-4 pt-6">
+              <div className="px-8 py-3 bg-white rounded-full shadow-sm border border-yellow-100 text-[10px] uppercase tracking-widest font-bold text-yellow-600">
+                Don't be mad! ❤️
+              </div>
+              <div className="px-8 py-3 bg-stone-800 rounded-full shadow-lg text-[10px] uppercase tracking-widest font-bold text-white">
+                Prank Master Abi
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-8">
+            <div className="aspect-video max-w-md mx-auto rounded-2xl overflow-hidden shadow-2xl rotate-2">
+              <img 
+                src="/41.gif" 
+                alt="Just kidding!" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <p className="mt-4 text-[10px] text-stone-400 uppercase tracking-widest font-bold">
+              Sending this to everyone who believed it...
+            </p>
+          </div>
+        </div>
+      </ScrollReveal>
+
       <style jsx>{`
         @keyframes marquee {
           0% { transform: translateX(0); }

@@ -135,6 +135,8 @@ const AboutAbigail = () => {
         </div>
       </ScrollReveal>
 
+
+
       {/* --- TEXT MARQUEE --- */}
       <div className="py-12 border-y border-stone-100 rotate-[-1deg] bg-stone-50 -mx-4">
         <div className="flex whitespace-nowrap animate-marquee font-serif italic text-2xl md:text-4xl text-stone-300">
@@ -155,6 +157,157 @@ const AboutAbigail = () => {
           <span className="mx-8">Art Lover</span>
         </div>
       </div>
+
+      {/* --- SECTION: THE QUIET MOMENTS --- */}
+      <ScrollReveal>
+        <div className="flex flex-col md:flex-row gap-12 items-center">
+          <div className="w-full md:w-1/2 space-y-6">
+            <h3 className="text-3xl md:text-4xl font-serif italic text-stone-800">The Quiet Moments</h3>
+            <div className="space-y-4">
+              <p className="text-stone-600 font-serif text-lg leading-relaxed italic">
+                "I find that the best stories aren't always found in grand adventures, but in the silence between the noise."
+              </p>
+              <p className="text-stone-500 text-sm leading-relaxed">
+                Whether it's the way the light hits the floor at 4 PM or the scent of old paper in a quiet library, I've learned to treasure the small, often overlooked details of existence. These are the moments that truly make us feel alive.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 pt-4">
+              <div className="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                <p className="text-[10px] uppercase tracking-widest text-rose-400 font-bold mb-1">Comfort</p>
+                <p className="text-stone-800 font-serif italic text-sm">Warm oversized sweaters</p>
+              </div>
+              <div className="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                <p className="text-[10px] uppercase tracking-widest text-rose-400 font-bold mb-1">Peace</p>
+                <p className="text-stone-800 font-serif italic text-sm">Cloudy afternoon walks</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
+                <img src="/3.jpeg" alt="Aesthetic moment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              </div>
+              <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
+                <img src="/5.jpeg" alt="Aesthetic moment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              </div>
+            </div>
+            <div className="space-y-4 pt-8">
+              <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
+                <img src="/7.jpeg" alt="Aesthetic moment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              </div>
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
+                <img src="/2.jpeg" alt="Aesthetic moment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </ScrollReveal>
+
+      {/* --- SECTION: THE PERSON I CARRY WITH ME --- */}
+      <ScrollReveal>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center py-16 border-t border-stone-100">
+          <div className="space-y-8 order-2 md:order-1">
+            <header>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-rose-300 font-bold">A Constant Thought</span>
+              <h3 className="text-3xl md:text-4xl font-serif italic text-stone-800 mt-2">The person I miss most.</h3>
+            </header>
+
+            <div className="space-y-6">
+              <p className="text-stone-600 font-serif text-lg leading-relaxed italic border-l-2 border-rose-100 pl-6">
+                "There’s a specific kind of quiet that only happens when you aren't here. It’s not just your presence I miss; it’s the way the world feels easier to explain when I'm talking to you."
+              </p>
+              
+              <p className="text-stone-500 text-sm leading-relaxed font-serif">
+                I find fragments of you in everything—in the songs I play on repeat, the sunset I forgot to photograph, and the stories I haven't written yet. Missing you isn't a heavy thing; it’s just a constant, soft hum in the background of my day.
+              </p>
+            </div>
+
+            <div className="pt-4">
+              <div className="inline-flex items-center gap-4 px-6 py-3 bg-rose-50/50 rounded-full border border-rose-100">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                </span>
+                <span className="text-[10px] uppercase tracking-widest font-bold text-stone-500">
+                  Counting the days until we aren't just an archive.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative order-1 md:order-2">
+            <div className="aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
+              <img 
+                src="/Abby.jpeg" 
+                alt="A memory of us" 
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+              />
+            </div>
+            {/* Overlaying "Polaroid" effect for the missing person vibe */}
+            <div className="absolute -bottom-6 -right-6 w-32 h-32 md:w-48 md:h-48 bg-white p-2 shadow-xl -rotate-6 hidden sm:block">
+              <div className="w-full h-full bg-stone-100 flex items-center justify-center overflow-hidden">
+                <img src="/20.jpeg" className="w-full h-full object-cover opacity-60" alt="Faded memory" />
+              </div>
+              <p className="text-[8px] font-serif italic text-stone-400 mt-2 text-center">Wish you were here.</p>
+            </div>
+          </div>
+        </div>
+      </ScrollReveal>
+
+      {/* --- SECTION: THE LANGUAGE OF ABSENCE --- */}
+      <ScrollReveal>
+        <div className="py-20 border-y border-stone-100 relative overflow-hidden">
+          {/* Subtle background text */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+            <span className="text-[20vw] font-serif italic whitespace-nowrap">Missing You</span>
+          </div>
+
+          <div className="max-w-4xl mx-auto px-6 relative z-10">
+            <div className="text-center space-y-4 mb-16">
+              <span className="text-[10px] uppercase tracking-[0.5em] text-rose-300 font-bold">The Unspoken</span>
+              <h3 className="text-3xl md:text-5xl font-serif italic text-stone-800">The Language of Absence</h3>
+              <p className="text-stone-400 font-serif italic">How I find you in the spaces between.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+              <div className="space-y-12">
+                <div className="group">
+                  <h4 className="text-rose-400 font-serif text-xl mb-2">01. Sensory Echoes</h4>
+                  <p className="text-stone-600 leading-relaxed font-serif italic text-sm md:text-base">
+                    It’s the phantom weight of your hand in mine when I walk alone, or the way a specific song intro makes me reach for my phone to tell you something—only to remember.
+                  </p>
+                </div>
+                
+                <div className="group">
+                  <h4 className="text-rose-400 font-serif text-xl mb-2">02. Saved Drafts</h4>
+                  <p className="text-stone-600 leading-relaxed font-serif italic text-sm md:text-base">
+                    My notes app is a graveyard of things I wanted to say but didn't. Stories I started writing for you, and sentences that felt too heavy to send.
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative pt-8 md:pt-0">
+                <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative z-20">
+                  <img 
+                    src="/12.jpeg" 
+                    alt="Reflective moment" 
+                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+                  />
+                  <div className="absolute inset-0 bg-rose-900/10 mix-blend-multiply"></div>
+                </div>
+                {/* Decorative floating element */}
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-rose-50 rounded-full -z-10 animate-pulse"></div>
+                <div className="mt-8 text-right">
+                  <p className="text-[10px] uppercase tracking-widest text-stone-400 font-bold">Current Feeling</p>
+                  <p className="text-stone-800 font-serif italic text-lg">"I miss the version of me that was with you."</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ScrollReveal>
 
       <style jsx>{`
         @keyframes marquee {

@@ -3,11 +3,11 @@ import { handleUpload, del } from '@vercel/blob/client';
 
 export const config = {
   api: {
-    bodyParser: false, // Required for handleUpload to work with large files
+    bodyParser: false, // Required for handleUpload to process file streams
   },
 };
 
-// Helper function to read the body stream when bodyParser is disabled
+// Helper function to read the stream when bodyParser is disabled
 async function getRawBody(readable) {
   const chunks = [];
   for await (const chunk of readable) {
@@ -25,15 +25,14 @@ export default async function handler(request, response) {
 
   if (request.method === 'OPTIONS') return response.status(200).end();
 
-  // Handle Image Deletion
+  // 2. Handle Deletion
   if (request.method === 'DELETE') {
     try {
-      // Manually parse the body because bodyParser is false
-      const rawBody = await getRawBody(request);
+      const rawBody = await getRawBody(request); // Manually read stream
       const { url } = JSON.parse(rawBody);
       
       if (!url) {
-        return response.status(400).json({ error: 'URL is required for deletion' });
+        return response.status(400).json({ error: 'URL is required' });
       }
 
       await del(url);
@@ -44,10 +43,10 @@ export default async function handler(request, response) {
     }
   }
 
-  // Handle Upload
+  // 3. Handle Upload
   try {
     const jsonResponse = await handleUpload({
-      body: request.body, // handleUpload knows how to handle the stream
+      body: request.body, 
       request,
       onBeforeGenerateToken: async () => {
         if (!process.env.BLOB_READ_WRITE_TOKEN) {

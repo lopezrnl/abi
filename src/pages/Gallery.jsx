@@ -1,41 +1,27 @@
 import React, { useState, useEffect } from "react";
-import localforage from "localforage";
-// 1. Import Neon to access the cloud database
 import { neon } from "@neondatabase/serverless";
+import { upload } from "@vercel/blob/client";
 
-// 2. Initialize Neon Client using your environment variable
 const sql = neon(import.meta.env.VITE_DATABASE_URL);
 
 const Gallery = () => {
   const [entries, setEntries] = useState([]);
+  const [filter, setFilter] = useState("all"); // Tracks: all, diary, gallery
+  const [isUploading, setIsUploading] = useState(false);
 
-  // 3. Updated useEffect to fetch from Neon Database
+  const loadData = async () => {
+    try {
+      // Fetch all memories to allow filtering on the frontend
+      const rows = await sql`SELECT * FROM memories ORDER BY id DESC`;
+      setEntries(rows);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        // Fetch memories from SQL database
-        const rows = await sql`SELECT * FROM memories ORDER BY id DESC`;
-        
-        // Also check localforage for any "Quick Snapshots" added locally
-        const localSaved = await localforage.getItem("abi_memories") || [];
-        
-        // Combine both (Database entries + Local entries)
-        setEntries([...rows, ...localSaved]);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Fallback to local storage if DB fails
-        const saved = await localforage.getItem("abi_memories");
-        if (saved) setEntries(saved);
-      }
-    };
     loadData();
   }, []);
-
-  // Save local snapshots to localforage
-  useEffect(() => {
-    const localOnly = entries.filter(e => e.content === "Added from Gallery");
-    localforage.setItem("abi_memories", localOnly);
-  }, [entries]);
 
   const downloadImage = (base64String, title) => {
     const timestamp = new Date().getTime();
@@ -48,52 +34,62 @@ const Gallery = () => {
     document.body.removeChild(link);
   };
 
-  const deleteVisual = async (entryId, isLocal) => {
+  const deleteVisual = async (entryId, imageUrls) => {
     if (window.confirm("Are you sure you want to delete this visual?")) {
-      if (!isLocal) {
-        try {
-          await sql`DELETE FROM memories WHERE id = ${entryId}`;
-        } catch (error) {
-          console.error("Delete error:", error);
+      try {
+        // Delete from Vercel Blob first
+        for (const url of imageUrls) {
+          await fetch('/api/upload', {
+            method: 'DELETE',
+            body: JSON.stringify({ url })
+          });
         }
+        // Then delete from Database
+        await sql`DELETE FROM memories WHERE id = ${entryId}`;
+        setEntries((prev) => prev.filter((e) => e.id !== entryId));
+      } catch (error) {
+        console.error("Delete error:", error);
       }
-      setEntries((prev) => prev.filter((e) => e.id !== entryId));
     }
   };
 
-  const handleQuickUpload = (e) => {
+  const handleQuickUpload = async (e) => {
     const files = Array.from(e.target.files);
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target.result;
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const MAX_WIDTH = 1200;
-          const scaleSize = MAX_WIDTH / img.width;
-          canvas.width = MAX_WIDTH;
-          canvas.height = img.height * scaleSize;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7);
+    if (files.length === 0) return;
 
-          const newEntry = {
-            id: Date.now() + Math.random(),
-            title: "Quick Snapshot",
-            content: "Added from Gallery", // Marker for local storage
-            images: [compressedDataUrl],
-            tag: "moment",
-            date: new Date().toLocaleDateString(),
-          };
-          setEntries((prev) => [newEntry, ...prev]);
-        };
-      };
-    });
+    setIsUploading(true);
+    try {
+      for (const file of files) {
+        // Upload to Vercel Blob
+        const blob = await upload(file.name, file, {
+          access: 'public',
+          handleUploadUrl: '/api/upload',
+        });
+
+        // Save entry to Neon with source 'gallery'
+        await sql`
+          INSERT INTO memories (title, content, tag, images, date, source)
+          VALUES ('Quick Snapshot', 'Added from Gallery', 'moment', ${[blob.url]}, ${new Date().toLocaleDateString()}, 'gallery')
+        `;
+      }
+      loadData(); // Refresh list
+      alert("Visuals added to cloud!");
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Error: " + error.message);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
-  const allImages = entries.filter((entry) => entry.images && entry.images.length > 0);
+  // Filter logic based on the 'source' column
+  const filteredImages = entries.filter((entry) => {
+    if (filter === "diary") return entry.source === "diary";
+    if (filter === "gallery") return entry.source === "gallery";
+    return true;
+  });
+
+  const allImages = filteredImages.filter((entry) => entry.images && entry.images.length > 0);
 
   return (
     <div className="animate-in fade-in duration-1000 p-4 sm:p-6 lg:p-10">
@@ -101,17 +97,30 @@ const Gallery = () => {
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif italic text-stone-800">Visuals.</h2>
           <p className="text-stone-400 mt-1 md:mt-2 italic text-sm md:text-base">A collection of captured light.</p>
+          
+          {/* Category Filter Buttons */}
+          <div className="flex gap-4 mt-6">
+            {["all", "diary", "gallery"].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`text-[10px] uppercase tracking-widest font-bold ${filter === cat ? 'text-rose-500' : 'text-stone-400'}`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <label className="w-full sm:w-auto text-center bg-stone-800 text-white px-6 py-3 md:px-8 md:py-3.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all shadow-md hover:bg-rose-500 cursor-pointer active:scale-95">
-          + Add Visual
-          <input type="file" multiple className="hidden" onChange={handleQuickUpload} accept="image/*" />
+        <label className={`w-full sm:w-auto text-center bg-stone-800 text-white px-6 py-3 md:px-8 md:py-3.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all shadow-md hover:bg-rose-500 cursor-pointer ${isUploading ? 'opacity-50' : 'active:scale-95'}`}>
+          {isUploading ? "Uploading..." : "+ Add Visual"}
+          <input type="file" multiple className="hidden" onChange={handleQuickUpload} accept="image/*" disabled={isUploading} />
         </label>
       </div>
 
       {allImages.length === 0 ? (
         <div className="h-64 border-2 border-dashed border-stone-200 rounded-3xl flex items-center justify-center text-stone-400 italic font-serif px-4 text-center">
-          No photos archived yet.
+          No photos found in this category.
         </div>
       ) : (
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
@@ -142,7 +151,7 @@ const Gallery = () => {
                     </button>
 
                     <button
-                      onClick={() => deleteVisual(item.id, item.content === "Added from Gallery")}
+                      onClick={() => deleteVisual(item.id, item.images)}
                       className="bg-white/20 backdrop-blur-md text-white p-2 rounded-full hover:bg-rose-500 transition-all active:scale-90"
                       title="Delete"
                     >
@@ -158,7 +167,7 @@ const Gallery = () => {
                       {item.title === "Quick Snapshot" ? "Moment" : item.title}
                     </p>
                     <p className="text-white/70 text-[9px] md:text-[10px] uppercase tracking-widest">
-                      {item.date}
+                      {item.date} {item.source === 'diary' && "(Diary Entry)"}
                     </p>
                   </div>
                 </div>

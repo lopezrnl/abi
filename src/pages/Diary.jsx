@@ -23,7 +23,8 @@ const Diary = () => {
 
   const fetchMemories = async () => {
     try {
-      const rows = await sql`SELECT * FROM memories ORDER BY id DESC`;
+      // Updated: Only fetch entries where source is 'diary' to prevent seeing gallery-only uploads
+      const rows = await sql`SELECT * FROM memories WHERE source = 'diary' ORDER BY id DESC`;
       setEntries(rows);
     } catch (error) {
       console.error("Error fetching from Neon:", error);
@@ -60,7 +61,6 @@ const Diary = () => {
       for (const item of imageFiles) {
         console.log('Uploading file:', item.file.name);
         
-        // CHANGE: Removed addRandomSuffix from here
         const newBlob = await upload(item.file.name, item.file, {
           access: 'public',
           handleUploadUrl: '/api/upload',
@@ -72,9 +72,10 @@ const Diary = () => {
 
       console.log('All uploads complete. Saving to database...');
 
+      // Updated: Explicitly set source as 'diary' during insertion
       await sql`
-        INSERT INTO memories (title, content, tag, images, date)
-        VALUES (${title}, ${content}, ${tag}, ${uploadedUrls}, ${new Date().toLocaleDateString()})
+        INSERT INTO memories (title, content, tag, images, date, source)
+        VALUES (${title}, ${content}, ${tag}, ${uploadedUrls}, ${new Date().toLocaleDateString()}, 'diary')
       `;
 
       console.log('Memory saved successfully!');
@@ -96,10 +97,19 @@ const Diary = () => {
     }
   };
 
-  const deleteEntry = async (id) => {
+  // Updated: Deletes images from Vercel Blob before removing the database entry
+  const deleteEntry = async (entry) => {
     if(window.confirm("Delete this memory?")) {
         try {
-            await sql`DELETE FROM memories WHERE id = ${id}`;
+            if (entry.images && entry.images.length > 0) {
+              for (const url of entry.images) {
+                await fetch('/api/upload', {
+                  method: 'DELETE',
+                  body: JSON.stringify({ url })
+                });
+              }
+            }
+            await sql`DELETE FROM memories WHERE id = ${entry.id}`;
             fetchMemories();
         } catch (error) {
             console.error("Delete error:", error);
@@ -143,7 +153,7 @@ const Diary = () => {
           <MemoryCard 
             key={entry.id} 
             memory={entry} 
-            onDelete={deleteEntry} 
+            onDelete={() => deleteEntry(entry)} 
             onView={(m) => setSelectedMemory(m)} 
           />
         ))}

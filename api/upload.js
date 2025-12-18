@@ -1,5 +1,5 @@
 /* eslint-env node */
-import { handleUpload } from '@vercel/blob/client';
+import { handleUpload, del } from '@vercel/blob/client';
 
 export const config = {
   api: {
@@ -11,10 +11,21 @@ export default async function handler(request, response) {
   // 1. Setup CORS Headers
   response.setHeader('Access-Control-Allow-Credentials', 'true');
   response.setHeader('Access-Control-Allow-Origin', '*');
-  response.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT');
+  response.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT,DELETE'); // Added DELETE
   response.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
 
   if (request.method === 'OPTIONS') return response.status(200).end();
+
+  // New: Handle Image Deletion from Blob
+  if (request.method === 'DELETE') {
+    try {
+      const { url } = JSON.parse(request.body);
+      await del(url);
+      return response.status(200).json({ success: true });
+    } catch (error) {
+      return response.status(500).json({ error: error.message });
+    }
+  }
 
   try {
     const jsonResponse = await handleUpload({
@@ -26,7 +37,6 @@ export default async function handler(request, response) {
         }
         return {
           allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'],
-          // CONFIGURATION MOVED HERE:
           addRandomSuffix: true, 
           tokenPayload: JSON.stringify({ userId: 'abigail-diary' }),
         };

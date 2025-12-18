@@ -1,5 +1,6 @@
 /* eslint-env node */
-import { handleUpload, del } from '@vercel/blob/client';
+import { handleUpload } from '@vercel/blob/client';
+import { del, head } from '@vercel/blob';
 
 export const config = {
   api: {
@@ -7,7 +8,10 @@ export const config = {
   },
 };
 
-// Helper function to read the stream when bodyParser is disabled
+/**
+ * Helper function to read the stream when bodyParser is disabled.
+ * This is used for parsing the body during DELETE requests.
+ */
 async function getRawBody(readable) {
   const chunks = [];
   for await (const chunk of readable) {
@@ -28,7 +32,7 @@ export default async function handler(request, response) {
   // 2. Handle Deletion
   if (request.method === 'DELETE') {
     try {
-      const rawBody = await getRawBody(request); // Manually read stream
+      const rawBody = await getRawBody(request);
       const { url } = JSON.parse(rawBody);
       
       if (!url) {
@@ -43,12 +47,24 @@ export default async function handler(request, response) {
     }
   }
 
-  // 3. Handle Upload
+  // 3. Check if Blob Exists (GET request with checkUrl query)
+  if (request.method === 'GET' && request.query.checkUrl) {
+    try {
+      await head(request.query.checkUrl);
+      return response.status(200).json({ exists: true });
+    } catch {
+      // If head fails, the file likely doesn't exist
+      return response.status(200).json({ exists: false });
+    }
+  }
+
+  // 4. Handle Client Upload (Token Generation)
   try {
     const jsonResponse = await handleUpload({
-      body: request.body, 
+      body: request.body,
       request,
-      onBeforeGenerateToken: async () => {
+      // Prefixing unused pathname with _ to satisfy ESLint
+      onBeforeGenerateToken: async (_pathname) => {
         if (!process.env.BLOB_READ_WRITE_TOKEN) {
           throw new Error('BLOB_READ_WRITE_TOKEN is not configured');
         }

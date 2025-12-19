@@ -6,19 +6,20 @@ const AboutAbigail = () => {
 
   const stats = [
     { label: "Location", value: "Dalig, Balayan, Batangas" },
-    { label: "Focus", value: "ka sa'kin" },
-    { label: "Vibe", value: "With me please" },
+    { label: "Focus", value: "School, Academic, Self-Improvement" },
+    { label: "Vibe", value: "Peace to those who understand" },
   ];
 
   const favorites = [
-    { label: "Color", value: "Mint Green", img: "https://images.unsplash.com/photo-1678245687839-231ed039a18b?q=80&w=1935&auto=format&fit=crop" },
-    { label: "Flower", value: "White Tulips", img: "https://plus.unsplash.com/premium_photo-1676117272892-785c4e6294d2?q=80&w=687&auto=format&fit=crop" },
-    { label: "Food", value: "Matcha Crepes", img: "https://images.unsplash.com/photo-1515516089376-88db1e267f6a?q=80&w=500&auto=format&fit=crop" },
-    { label: "Movie", value: "Little Women", img: "https://images.unsplash.com/photo-1543840911-35f994792798?q=80&w=500&auto=format&fit=crop" },
-    { label: "Anime", value: "Spy x Family", img: "https://images.unsplash.com/photo-1620070081033-500609f30b91?q=80&w=500&auto=format&fit=crop" },
-    { label: "Hobby", value: "Writing Stories", img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=500&auto=format&fit=crop" },
-    { label: "ML Hero", value: "Floryn", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=500&auto=format&fit=crop" },
-    { label: "Place", value: "Sanpiro", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=500&auto=format&fit=crop" },
+    { label: "Color", value: "Green", img: "https://images.unsplash.com/photo-1678245687839-231ed039a18b?q=80&w=1935&auto=format&fit=crop" },
+    { label: "Flower", value: "Lilies", img: "https://plus.unsplash.com/premium_photo-1676068243733-df1880c2aef8?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    { label: "Food", value: "Lumpiang Gulay", img: "https://i.ytimg.com/vi/2gRxKaqnDdQ/maxresdefault.jpg" },
+    { label: "Drinks", value: "Dutch Mill", img: "https://imartgrocersph.com/wp-content/uploads/2020/09/Dutch-Mill-Yoghurt-Drink-Strawberry-180mL.jpeg" },
+    { label: "Movie", value: "Haikyu Movie", img: "https://www.themoviedb.org/t/p/original/4Qcbngkqmljf5X2AtzBI5fN0kR8.jpg" },
+    { label: "Anime", value: "Campfire Cooking", img: "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/crunchyroll/6bb16816cd77b6e7cc4f6d8a5ddc9e90.jpe" },
+    { label: "Hobby", value: "Writing and Reading", img: "https://images.unsplash.com/photo-1549301019-a331aee4f3a3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    { label: "Place", value: "Switzerland", img: "https://plus.unsplash.com/premium_photo-1689805586474-e59c51f38254?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    { label: "Author", value: "iDangs", img: "https://tse2.mm.bing.net/th/id/OIP.IYefmS0wIXcDi3GBwY2sngHaJQ?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" },
   ];
 
   const chapters = [
@@ -28,15 +29,15 @@ const AboutAbigail = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 md:space-y-32 my-8 md:my-12 overflow-hidden">
-      
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 md:space-y-28 my-8 md:my-12 overflow-hidden">
+
       {/* --- HERO SECTION --- */}
       <ScrollReveal>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
           <div className="relative group order-1 md:order-none">
             <div className="aspect-[4/5] bg-stone-200 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl">
-              <img 
-                src="/27.jpeg" 
+              <img
+                src="/27.jpeg"
                 alt="Abigail"
                 className="w-full h-full object-cover grayscale md:group-hover:grayscale-0 transition-all duration-1000"
               />
@@ -82,16 +83,16 @@ const AboutAbigail = () => {
       {/* --- HOVER FAVORITES SECTION --- */}
       <ScrollReveal>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 bg-stone-50 rounded-3xl md:rounded-[3rem] p-6 sm:p-8 md:p-12 border border-stone-100 items-center">
-          
+
           <div className="space-y-1 md:space-y-2 order-2 md:order-none">
             <h3 className="text-xl md:text-2xl font-serif italic text-stone-800 mb-4 md:mb-8 text-center md:text-left">Curated Favorites</h3>
             <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-1 gap-1 md:gap-0">
               {favorites.map((fav) => (
-                <div 
+                <div
                   key={fav.label}
                   onMouseEnter={() => setHoveredImage(fav.img)}
                   onMouseLeave={() => setHoveredImage("/Abby.jpeg")}
-                  onClick={() => setHoveredImage(fav.img)} 
+                  onClick={() => setHoveredImage(fav.img)}
                   className="flex justify-between items-center py-2 md:py-3 px-3 md:px-4 rounded-xl hover:bg-white md:hover:shadow-sm transition-all cursor-crosshair group active:bg-white"
                 >
                   <span className="text-[9px] md:text-[10px] uppercase tracking-widest text-stone-400 md:group-hover:text-rose-400 transition-colors">
@@ -106,9 +107,9 @@ const AboutAbigail = () => {
           </div>
 
           <div className="relative aspect-square md:aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl shadow-lg bg-stone-200 order-1 md:order-none">
-            <img 
-              key={hoveredImage} 
-              src={hoveredImage} 
+            <img
+              key={hoveredImage}
+              src={hoveredImage}
               alt="Preview"
               className="w-full h-full object-cover animate-in fade-in zoom-in-95 duration-500"
             />
@@ -117,27 +118,57 @@ const AboutAbigail = () => {
         </div>
       </ScrollReveal>
 
-      {/* --- UPDATED SECTION: CURRENT STATUS (LIGHT GRAY) --- */}
+      {/* --- SECTION: THE QUIET MOMENTS --- */}
       <ScrollReveal>
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-10 rounded-[2rem] bg-stone-200 border border-stone-300 text-stone-800 shadow-sm">
-          <div className="space-y-2 text-center md:text-left">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-rose-400 font-bold">Current Status</p>
-            <h3 className="text-2xl md:text-3xl font-serif italic text-stone-700">Self-love.</h3>
-          </div>
-          <div className="flex gap-4">
-            <div className="px-6 py-2 bg-white border border-stone-300 rounded-full text-[10px] uppercase tracking-widest font-bold text-stone-500 shadow-sm">
-              Writing
+        <div className="flex flex-col md:flex-row gap-12 items-center">
+          <div className="w-full md:w-1/2 space-y-6">
+            <h3 className="text-3xl md:text-4xl font-serif italic text-stone-800">The Cost of Following</h3>
+
+            <div className="space-y-4">
+              <p className="text-stone-600 font-serif text-lg leading-relaxed italic">
+                "Going deeper means changing your life for the better—limiting what gives you comfort for what is right."
+              </p>
+              <p className="text-stone-500 text-sm leading-relaxed">
+                Following Him is a never-ending transformation, limiting what gives you comfort to what is right. It is not just believing, but a never-ending change as you walk into a Christ-like life.
+              </p>
+              <p className="text-stone-500 text-sm leading-relaxed">
+                Did the apostles have the easiest life? No. But following Him means you are not alone; there is a God who will never abandon you.
+              </p>
             </div>
-            <div className="px-6 py-2 bg-white border border-stone-300 rounded-full text-[10px] uppercase tracking-widest font-bold text-stone-500 shadow-sm">
-              Reading
+
+            <div className="grid grid-cols-2 gap-4 pt-4">
+              <div className="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                <p className="text-[10px] uppercase tracking-widest text-rose-400 font-bold mb-1">The Promise</p>
+                <p className="text-stone-800 font-serif italic text-sm">Isaiah 43:2 - Through deep waters</p>
+              </div>
+              <div className="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                <p className="text-[10px] uppercase tracking-widest text-rose-400 font-bold mb-1">The Reality</p>
+                <p className="text-stone-800 font-serif italic text-sm">A walk of faith, not ease</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
+                <img src="/a.jpg" alt="Deep waters" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              </div>
+              <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
+                <img src="/c.jpg" alt="Reflective path" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              </div>
+            </div>
+            <div className="space-y-4 pt-8">
+              <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
+                <img src="/d.jpg" alt="Quiet prayer" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              </div>
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
+                <img src="/b.jpg" alt="Peace in storm" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              </div>
             </div>
           </div>
         </div>
       </ScrollReveal>
 
-
-
-      {/* --- TEXT MARQUEE --- */}
       <div className="py-12 border-y border-stone-100 rotate-[-1deg] bg-stone-50 -mx-4">
         <div className="flex whitespace-nowrap animate-marquee font-serif italic text-2xl md:text-4xl text-stone-300">
           <span className="mx-8">Dreamer</span>
@@ -157,247 +188,6 @@ const AboutAbigail = () => {
           <span className="mx-8">Art Lover</span>
         </div>
       </div>
-
-      {/* --- SECTION: THE QUIET MOMENTS --- */}
-      <ScrollReveal>
-        <div className="flex flex-col md:flex-row gap-12 items-center">
-          <div className="w-full md:w-1/2 space-y-6">
-            <h3 className="text-3xl md:text-4xl font-serif italic text-stone-800">The Quiet Moments</h3>
-            <div className="space-y-4">
-              <p className="text-stone-600 font-serif text-lg leading-relaxed italic">
-                "I find that the best stories aren't always found in grand adventures, but in the silence between the noise."
-              </p>
-              <p className="text-stone-500 text-sm leading-relaxed">
-                Whether it's the way the light hits the floor at 4 PM or the scent of old paper in a quiet library, I've learned to treasure the small, often overlooked details of existence. These are the moments that truly make us feel alive.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              <div className="p-4 bg-stone-50 rounded-2xl border border-stone-100">
-                <p className="text-[10px] uppercase tracking-widest text-rose-400 font-bold mb-1">Comfort</p>
-                <p className="text-stone-800 font-serif italic text-sm">Warm oversized sweaters</p>
-              </div>
-              <div className="p-4 bg-stone-50 rounded-2xl border border-stone-100">
-                <p className="text-[10px] uppercase tracking-widest text-rose-400 font-bold mb-1">Peace</p>
-                <p className="text-stone-800 font-serif italic text-sm">Cloudy afternoon walks</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
-            <div className="space-y-4">
-              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
-                <img src="/3.jpeg" alt="Aesthetic moment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-              </div>
-              <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
-                <img src="/5.jpeg" alt="Aesthetic moment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-              </div>
-            </div>
-            <div className="space-y-4 pt-8">
-              <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
-                <img src="/7.jpeg" alt="Aesthetic moment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-              </div>
-              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
-                <img src="/2.jpeg" alt="Aesthetic moment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </ScrollReveal>
-
-      {/* --- SECTION: THE PERSON I CARRY WITH ME --- */}
-      <ScrollReveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center py-16 border-t border-stone-100">
-          <div className="space-y-8 order-2 md:order-1">
-            <header>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-rose-300 font-bold">A Constant Thought</span>
-              <h3 className="text-3xl md:text-4xl font-serif italic text-stone-800 mt-2">The person I miss most.</h3>
-            </header>
-
-            <div className="space-y-6">
-              <p className="text-stone-600 font-serif text-lg leading-relaxed italic border-l-2 border-rose-100 pl-6">
-                "There’s a specific kind of quiet that only happens when you aren't here. It’s not just your presence I miss; it’s the way the world feels easier to explain when I'm talking to you."
-              </p>
-              
-              <p className="text-stone-500 text-sm leading-relaxed font-serif">
-                I find fragments of you in everything—in the songs I play on repeat, the sunset I forgot to photograph, and the stories I haven't written yet. Missing you isn't a heavy thing; it’s just a constant, soft hum in the background of my day.
-              </p>
-            </div>
-
-            <div className="pt-4">
-              <div className="inline-flex items-center gap-4 px-6 py-3 bg-rose-50/50 rounded-full border border-rose-100">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-                </span>
-                <span className="text-[10px] uppercase tracking-widest font-bold text-stone-500">
-                  Counting the days until we aren't just an archive.
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative order-1 md:order-2">
-            <div className="aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
-              <img 
-                src="/Abby.jpeg" 
-                alt="A memory of us" 
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
-              />
-            </div>
-            {/* Overlaying "Polaroid" effect for the missing person vibe */}
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 md:w-48 md:h-48 bg-white p-2 shadow-xl -rotate-6 hidden sm:block">
-              <div className="w-full h-full bg-stone-100 flex items-center justify-center overflow-hidden">
-                <img src="/20.jpeg" className="w-full h-full object-cover opacity-60" alt="Faded memory" />
-              </div>
-              <p className="text-[8px] font-serif italic text-stone-400 mt-2 text-center">Wish you were here.</p>
-            </div>
-          </div>
-        </div>
-      </ScrollReveal>
-
-      {/* --- SECTION: THE LANGUAGE OF ABSENCE --- */}
-      <ScrollReveal>
-        <div className="py-20 border-y border-stone-100 relative overflow-hidden">
-          {/* Subtle background text */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-            <span className="text-[20vw] font-serif italic whitespace-nowrap">Missing You</span>
-          </div>
-
-          <div className="max-w-4xl mx-auto px-6 relative z-10">
-            <div className="text-center space-y-4 mb-16">
-              <span className="text-[10px] uppercase tracking-[0.5em] text-rose-300 font-bold">The Unspoken</span>
-              <h3 className="text-3xl md:text-5xl font-serif italic text-stone-800">The Language of Absence</h3>
-              <p className="text-stone-400 font-serif italic">How I find you in the spaces between.</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-              <div className="space-y-12">
-                <div className="group">
-                  <h4 className="text-rose-400 font-serif text-xl mb-2">01. Sensory Echoes</h4>
-                  <p className="text-stone-600 leading-relaxed font-serif italic text-sm md:text-base">
-                    It’s the phantom weight of your hand in mine when I walk alone, or the way a specific song intro makes me reach for my phone to tell you something—only to remember.
-                  </p>
-                </div>
-                
-                <div className="group">
-                  <h4 className="text-rose-400 font-serif text-xl mb-2">02. Saved Drafts</h4>
-                  <p className="text-stone-600 leading-relaxed font-serif italic text-sm md:text-base">
-                    My notes app is a graveyard of things I wanted to say but didn't. Stories I started writing for you, and sentences that felt too heavy to send.
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative pt-8 md:pt-0">
-                <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative z-20">
-                  <img 
-                    src="/12.jpeg" 
-                    alt="Reflective moment" 
-                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
-                  />
-                  <div className="absolute inset-0 bg-rose-900/10 mix-blend-multiply"></div>
-                </div>
-                {/* Decorative floating element */}
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-rose-50 rounded-full -z-10 animate-pulse"></div>
-                <div className="mt-8 text-right">
-                  <p className="text-[10px] uppercase tracking-widest text-stone-400 font-bold">Current Feeling</p>
-                  <p className="text-stone-800 font-serif italic text-lg">"I miss the version of me that was with you."</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ScrollReveal>
-
-      {/* --- SECTION: THE FINAL ACT --- */}
-      <ScrollReveal>
-        <div className="py-24 md:py-32 flex flex-col items-center justify-center text-center space-y-10 relative">
-          {/* Subtle line that fades away */}
-          <div className="w-px h-24 bg-gradient-to-b from-rose-200 to-transparent"></div>
-          
-          <div className="max-w-2xl px-6 space-y-6">
-            <span className="text-[10px] uppercase tracking-[0.6em] text-stone-400 font-bold">The End of the Archive</span>
-            <h3 className="text-3xl md:text-5xl font-serif italic text-stone-800">My last act of loving you.</h3>
-            
-            <p className="text-stone-500 font-serif text-lg md:text-xl leading-relaxed italic">
-              "I am putting down the pen now. Not because the story is over, but because I have finally realized that some chapters are meant to be read in silence, and some people are meant to be loved from a distance I can no longer bridge."
-            </p>
-
-            <div className="pt-8 opacity-60">
-              <p className="text-stone-400 text-sm font-serif italic">
-                This digital space, these words, and every captured light— <br />
-                Consider this my final letter. The one I never sent.
-              </p>
-            </div>
-          </div>
-
-          {/* A final, static "Polaroid" that represents the last memory */}
-          <div className="relative mt-12 group">
-            <div className="w-48 h-60 bg-white p-3 shadow-2xl border border-stone-100 -rotate-2 group-hover:rotate-0 transition-transform duration-1000">
-              <div className="w-full h-4/5 bg-stone-50 overflow-hidden">
-                <img 
-                  src="/30.jpeg" 
-                  alt="The last frame" 
-                  className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-80 transition-opacity duration-1000" 
-                />
-              </div>
-              <div className="mt-4 flex justify-between items-center px-1">
-                <span className="text-[8px] font-serif italic text-stone-300">Final Entry</span>
-                <span className="text-[8px] font-serif italic text-stone-300">{new Date().toLocaleDateString()}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-16">
-            <div className="h-1.5 w-1.5 bg-rose-200 rounded-full animate-pulse mx-auto"></div>
-          </div>
-        </div>
-      </ScrollReveal>
-
-      {/* --- SECTION: THE REVEAL (PRANK) --- */}
-      <ScrollReveal>
-        <div className="my-20 p-8 md:p-16 rounded-[3rem] bg-yellow-50 border-4 border-dashed border-yellow-200 text-center space-y-8 relative overflow-hidden">
-          {/* Confetti Emoji Decorations */}
-          <div className="absolute top-4 left-4 animate-bounce text-2xl">🎉</div>
-          <div className="absolute bottom-4 right-4 animate-bounce delay-100 text-2xl">😜</div>
-          <div className="absolute top-1/2 right-8 -translate-y-1/2 animate-pulse text-2xl">✨</div>
-
-          <div className="space-y-4 relative z-10">
-            <span className="text-[10px] uppercase tracking-[0.6em] text-yellow-600 font-bold">Gotcha!</span>
-            <h3 className="text-4xl md:text-6xl font-serif italic text-stone-800">
-              Wait... it’s just a prank! 
-            </h3>
-            
-            <div className="max-w-xl mx-auto">
-              <p className="text-stone-600 font-serif text-lg md:text-xl leading-relaxed italic">
-                "Did I make you cry? Or at least feel a little bit sentimental? Mission accomplished! All that 'last act of love' stuff was just me testing my acting (and coding) skills."
-              </p>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-4 pt-6">
-              <div className="px-8 py-3 bg-white rounded-full shadow-sm border border-yellow-100 text-[10px] uppercase tracking-widest font-bold text-yellow-600">
-                Don't be mad! ❤️
-              </div>
-              <div className="px-8 py-3 bg-stone-800 rounded-full shadow-lg text-[10px] uppercase tracking-widest font-bold text-white">
-                Prank Master Abi
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-8">
-            <div className="aspect-video max-w-md mx-auto rounded-2xl overflow-hidden shadow-2xl rotate-2">
-              <img 
-                src="/41.gif" 
-                alt="Just kidding!" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <p className="mt-4 text-[10px] text-stone-400 uppercase tracking-widest font-bold">
-              Sending this to everyone who believed it...
-            </p>
-          </div>
-        </div>
-      </ScrollReveal>
 
       <style jsx>{`
         @keyframes marquee {

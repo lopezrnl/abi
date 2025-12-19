@@ -127,6 +127,26 @@ const AboutAbigail = () => {
         </div>
       </ScrollReveal>
 
+            <div className="py-12 border-y border-stone-100 rotate-[-1deg] bg-stone-50 -mx-4">
+        <div className="flex whitespace-nowrap animate-marquee font-serif italic text-2xl md:text-4xl text-stone-300">
+          <span className="mx-8">Dreamer</span>
+          <span className="mx-8 text-rose-300">✦</span>
+          <span className="mx-8">Writer</span>
+          <span className="mx-8 text-rose-300">✦</span>
+          <span className="mx-8">Coffee Enthusiast</span>
+          <span className="mx-8 text-rose-300">✦</span>
+          <span className="mx-8">Cat Lover</span>
+          <span className="mx-8 text-rose-300">✦</span>
+          <span className="mx-8">Dreamer</span>
+          <span className="mx-8 text-rose-300">✦</span>
+          <span className="mx-8">Writer</span>
+          <span className="mx-8 text-rose-300">✦</span>
+          <span className="mx-8">Coffee Enthusiast</span>
+          <span className="mx-8 text-rose-300">✦</span>
+          <span className="mx-8">Cat Lover</span>
+        </div>
+      </div>
+
       {/* --- SECTION: THE QUIET MOMENTS --- */}
       <ScrollReveal>
         <div className="flex flex-col md:flex-row gap-12 items-center">
@@ -177,26 +197,6 @@ const AboutAbigail = () => {
           </div>
         </div>
       </ScrollReveal>
-
-      <div className="py-12 border-y border-stone-100 rotate-[-1deg] bg-stone-50 -mx-4">
-        <div className="flex whitespace-nowrap animate-marquee font-serif italic text-2xl md:text-4xl text-stone-300">
-          <span className="mx-8">Dreamer</span>
-          <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Writer</span>
-          <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Coffee Enthusiast</span>
-          <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Cat Lover</span>
-          <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Dreamer</span>
-          <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Writer</span>
-          <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Coffee Enthusiast</span>
-          <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Cat Lover</span>
-        </div>
-      </div>
 
       <style jsx>{`
         @keyframes marquee {

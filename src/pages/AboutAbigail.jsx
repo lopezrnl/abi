@@ -13,19 +13,28 @@ const AboutAbigail = () => {
   const favorites = [
     { label: "Color", value: "Green", img: "https://images.unsplash.com/photo-1678245687839-231ed039a18b?q=80&w=1935&auto=format&fit=crop" },
     { label: "Flower", value: "Lilies", img: "https://plus.unsplash.com/premium_photo-1676068243733-df1880c2aef8?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-    { label: "Food", value: "Lumpiang Gulay", img: "https://i.ytimg.com/vi/2gRxKaqnDdQ/maxresdefault.jpg" },
-    { label: "Drinks", value: "Dutch Mill", img: "https://imartgrocersph.com/wp-content/uploads/2020/09/Dutch-Mill-Yoghurt-Drink-Strawberry-180mL.jpeg" },
-    { label: "Movie", value: "Haikyu Movie", img: "https://www.themoviedb.org/t/p/original/4Qcbngkqmljf5X2AtzBI5fN0kR8.jpg" },
-    { label: "Anime", value: "Campfire Cooking", img: "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/crunchyroll/6bb16816cd77b6e7cc4f6d8a5ddc9e90.jpe" },
-    { label: "Hobby", value: "Writing and Reading", img: "https://images.unsplash.com/photo-1549301019-a331aee4f3a3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    { label: "Food", value: "Lumpiang Gulay", img: "https://i.pinimg.com/1200x/ff/85/f4/ff85f42c19d2802ff10824904b4c49c7.jpg" },
+    { label: "Drinks", value: "Dutch Mill", img: "https://i.pinimg.com/736x/d7/ef/c1/d7efc1f9667d602b3b52dd4e00997dde.jpg" },
+    { label: "Movie", value: "Haikyu Movie", img: "https://i.pinimg.com/736x/a9/e0/1c/a9e01cc7ca8900d6aeb32a8abb82a7e0.jpg" },
+    { label: "Anime", value: "Campfire Cooking", img: "https://i.pinimg.com/736x/1d/3a/f8/1d3af8fc7a83414eb58babbe0a9cbcba.jpg" },
+    { label: "Hobby", value: "Writing and Reading", img: "https://i.pinimg.com/736x/0f/da/83/0fda83dc72103e37993994d252015659.jpg" },
     { label: "Place", value: "Switzerland", img: "https://plus.unsplash.com/premium_photo-1689805586474-e59c51f38254?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
     { label: "Author", value: "iDangs", img: "https://tse2.mm.bing.net/th/id/OIP.IYefmS0wIXcDi3GBwY2sngHaJQ?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" },
   ];
 
   const chapters = [
-    { title: "The Dreamer", desc: "Finding magic in the mundane and beauty in every sunset." },
-    { title: "The Writer", desc: "Turning fleeting feelings into permanent words through stories." },
-    { title: "The Wanderer", desc: "Exploring the quiet corners of Batangas and beyond." },
+    {
+      title: "The Bible",
+      desc: "A foundational sacred text comprising the Old and New Testaments, guiding faith and history."
+    },
+    {
+      title: "You're Not Enough (and that's okay)",
+      desc: "A counter-cultural perspective on self-help that trades the pressure of self-sufficiency for faith and grace."
+    },
+    {
+      title: "A Gentle Reminder",
+      desc: "A collection of empathetic prose and poetry centered on healing, self-love, and finding hope during hard times."
+    }
   ];
 
   return (

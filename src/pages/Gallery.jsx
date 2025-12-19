@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { neon } from "@neondatabase/serverless";
 import { upload } from "@vercel/blob/client";
 
@@ -27,7 +27,8 @@ const Gallery = () => {
     const timestamp = new Date().getTime();
     const fileName = title.replace(/\s+/g, '_').toLowerCase();
     const link = document.createElement("a");
-    link.href = base64String;
+    const isDataUri = base64String.startsWith('data:');
+    link.href = isDataUri ? base64String : `data:image/jpeg;base64,${base64String}`;
     link.download = `Abi_${fileName}_${timestamp}.jpg`;
     document.body.appendChild(link);
     link.click();

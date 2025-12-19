@@ -182,19 +182,19 @@ const AboutAbigail = () => {
         <div className="flex whitespace-nowrap animate-marquee font-serif italic text-2xl md:text-4xl text-stone-300">
           <span className="mx-8">Dreamer</span>
           <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Storyteller</span>
+          <span className="mx-8">Writer</span>
           <span className="mx-8 text-rose-300">✦</span>
           <span className="mx-8">Coffee Enthusiast</span>
           <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Art Lover</span>
+          <span className="mx-8">Cat Lover</span>
           <span className="mx-8 text-rose-300">✦</span>
           <span className="mx-8">Dreamer</span>
           <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Storyteller</span>
+          <span className="mx-8">Writer</span>
           <span className="mx-8 text-rose-300">✦</span>
           <span className="mx-8">Coffee Enthusiast</span>
           <span className="mx-8 text-rose-300">✦</span>
-          <span className="mx-8">Art Lover</span>
+          <span className="mx-8">Cat Lover</span>
         </div>
       </div>
 

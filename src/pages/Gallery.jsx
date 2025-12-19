@@ -23,16 +23,34 @@ const Gallery = () => {
     loadData();
   }, []);
 
-  const downloadImage = (base64String, title) => {
-    const timestamp = new Date().getTime();
-    const fileName = title.replace(/\s+/g, '_').toLowerCase();
-    const link = document.createElement("a");
-    const isDataUri = base64String.startsWith('data:');
-    link.href = isDataUri ? base64String : `data:image/jpeg;base64,${base64String}`;
-    link.download = `Abi_${fileName}_${timestamp}.jpg`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+const downloadImage = async (url, title) => {
+    try {
+      const timestamp = new Date().getTime();
+      const fileName = title.replace(/\s+/g, '_').toLowerCase();
+      
+      // 1. Fetch the image data
+      const response = await fetch(url);
+      const blob = await response.blob();
+      
+      // 2. Create a local URL for the blob
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      // 3. Create the anchor and trigger download
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `Abi_${fileName}_${timestamp}.jpg`;
+      
+      document.body.appendChild(link);
+      link.click();
+      
+      // 4. Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed:", error);
+      // Fallback: try opening in a new tab if fetch fails
+      window.open(url, '_blank');
+    }
   };
 
   const deleteVisual = async (entryId, imageUrls) => {

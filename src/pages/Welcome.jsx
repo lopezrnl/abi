@@ -45,7 +45,7 @@ const Welcome = () => {
         className="absolute top-[10%] left-[10%] w-32 h-44 md:w-48 md:h-64 opacity-60 hidden sm:block"
       >
         <img 
-          src="/48.jpeg" 
+          src="/a2.jpg" 
           alt="decoration"
           className="w-full h-full object-cover rounded-2xl shadow-sm grayscale hover:grayscale-0 transition-all duration-700"
         />
@@ -60,7 +60,7 @@ const Welcome = () => {
         className="absolute bottom-[10%] right-[10%] w-32 h-44 md:w-48 md:h-64 opacity-60 hidden sm:block"
       >
         <img 
-          src="/58.jpeg" 
+          src="/a4.jpg" 
           alt="decoration"
           className="w-full h-full object-cover rounded-2xl shadow-sm grayscale hover:grayscale-0 transition-all duration-700"
         />

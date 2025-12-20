@@ -5,7 +5,7 @@ const AboutAbigail = () => {
   const [hoveredImage, setHoveredImage] = useState("/Abby.jpeg");
 
   const stats = [
-    { label: "Location", value: "Dalig, Balayan, Batangas" },
+    { label: "Birthday", value: "August 02, 2005" },
     { label: "Focus", value: "School, Academic, Self-Improvement" },
     { label: "Vibe", value: "Peace to those who understand" },
   ];
